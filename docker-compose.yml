@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  blast-radius-vpc:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./examples/aws-vpc:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONPATH=/app
+    command: ["python", "blast_radius.py", "--serve", "/data", "--host", "0.0.0.0", "--port", "5000"]
+    restart: unless-stopped
+
+  blast-radius-app:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./examples/multi-tier-app:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONPATH=/app
+    command: ["python", "blast_radius.py", "--serve", "/data", "--host", "0.0.0.0", "--port", "5000"]
+    restart: unless-stopped
+
+  blast-radius-kubernetes:
+    build: .
+    ports:
+      - "5002:5000"
+    volumes:
+      - ./examples/kubernetes:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONPATH=/app
+    command: ["python", "blast_radius.py", "--serve", "/data", "--host", "0.0.0.0", "--port", "5000"]
+    restart: unless-stopped
+
+  blast-radius-serverless:
+    build: .
+    ports:
+      - "5003:5000"
+    volumes:
+      - ./examples/serverless:/data:ro
+      - ./output:/output
+    environment:
+      - PYTHONPATH=/app
+    command: ["python", "blast_radius.py", "--serve", "/data", "--host", "0.0.0.0", "--port", "5000"]
+    restart: unless-stopped 
